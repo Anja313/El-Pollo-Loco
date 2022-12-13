@@ -7,6 +7,7 @@ class MovableObject {
     imageCach = {};
     currentImage = 0;
     speed = 0.15;
+    keyboard = new Keyboard();
 
 
     loadImage(path){
