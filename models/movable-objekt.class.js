@@ -9,30 +9,25 @@ class MovableObject {
     speed = 0.15;
 
 
-    loadImage(path){
-        this.img = new Image();
-        this.img.src = path;
-    }
+loadImage(path){
+    this.img = new Image();
+    this.img.src = path;
+}
+
+moveRight(){
+console.log('Moving right');
+
+};
 
 
-    loadImages(arr){
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imageCach[path] = img;
-    });
 
-    }
-    moveRight(){
-        console.log('Moving right');
-
-    }
 
 
     moveLeft(){
         setInterval(() => {
             this.x -= this.speed;
         }, 1000 /60);
-    }
+    };
         
+
 }

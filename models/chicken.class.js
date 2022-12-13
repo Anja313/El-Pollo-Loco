@@ -1,4 +1,4 @@
-class Chicken extends MovableObject {
+class chicken extends MovableObject {
    height = 100;
    width = 80;
    chickenWalking = [
