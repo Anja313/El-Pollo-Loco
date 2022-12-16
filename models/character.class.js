@@ -3,11 +3,12 @@ class Character extends MovableObject {
     height = 220;
     width = 120;
     y = 80;
-    // y = 220;
     speed =5;
    
 
    
+
+    
 
     ImagesWalking = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -16,7 +17,7 @@ class Character extends MovableObject {
         'img/2_character_pepe/2_walk/W-24.png',
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png',
-    ];
+    ]
  
     
     ImagesJumping = [
@@ -29,8 +30,19 @@ class Character extends MovableObject {
         'img/2_character_pepe/3_jump/J-37.png',
         'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png',
-    ];
+    ]
  
+  
+    ImagesDead = [
+        'img/2_character_pepe/4_hurt/H-41.png',
+        'img/2_character_pepe/4_hurt/H-41.png',
+        'img/2_character_pepe/4_hurt/H-42.png',
+        'img/2_character_pepe/4_hurt/H-42.png',
+        'img/2_character_pepe/4_hurt/H-43.png',
+        'img/2_character_pepe/4_hurt/H-43.png',
+       
+      
+    ]
 
     world;
  
@@ -39,6 +51,7 @@ class Character extends MovableObject {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.ImagesWalking);
         this.loadImages(this.ImagesJumping);
+        this.loadImages(this.ImagesDead);
         this.applyGravity();
         this.animate();
 
@@ -65,26 +78,33 @@ class Character extends MovableObject {
         });
 
         setInterval(() => {
-            if(this.isAboveGround()) {
-                this.playAnimation(this.ImagesJumping);
-                }else {
+            if(this.isDead()){
+               
+                this.playAnimation(this.ImagesDead);
+            }else{
+
+          
+                if(this.isAboveGround()) {
+                 
+                    this.playAnimation(this.ImagesJumping); // 
+                } else{
+
+               
 
                     if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
 
                         this.playAnimation(this.ImagesWalking);
             
                     }
+                } 
                 }
-
-
-        }, 20);
+            
+        }, 100);
    
     }
 
 
-    // jump(){
-
-    // }
+  
 
 
 }
