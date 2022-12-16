@@ -7,6 +7,7 @@ class World {
     ctx; 
     keyboard;
     camera_x = 0;
+    statusBar = new StatusBar();
 
     constructor(canvas, keyboard) {
 
@@ -45,12 +46,13 @@ class World {
 
 
     draw(){
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // alle welten übernehmen 
 
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjektsToMap(this.level.backgroundObjekt);
         this.addToMap(this.character);
+        this.addToMap(this.statusBar);
         this.addObjektsToMap(this.level.enemies);
         this.addObjektsToMap(this.level.clouds);
         // this.addObjektsToMap(this.level.endboss);
@@ -77,11 +79,12 @@ class World {
     // MovableObject
     addToMap(mo) {
         if(mo.otherDirection){
-            this.flipImage(mo);
+            this.flipImage(mo); // spiegeln
             }
        
             mo.draw(this.ctx);
-            mo.drawFrame(this.ctx);
+            mo.drawFrame(this.ctx); // zeichne den Rahmne
+
 
           
         
