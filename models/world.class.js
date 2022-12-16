@@ -1,30 +1,8 @@
 class World {
 
-    // character = [
-    //     new Character()
-    // ];
-
-  character = new Character();
-    
-    enemies = [
-        new Chicken(),
-        new Chicken(),
-        new Chicken()
-    ];
-
-    backgroundObjekt = [
-       
-        new BackgroundObject('img/5_background/layers/air.png', 0),
-        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0),
-    ];
-
-    clouds = [
-        new Cloud(),
-        
-    ];
-
+  
+    character = new Character();
+    level = level1;
     canvas;
     ctx; 
     keyboard;
@@ -50,15 +28,16 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addObjektsToMap(this.backgroundObjekt);
+        this.addObjektsToMap(this.level.backgroundObjekt);
         this.addToMap(this.character);
-        this.addObjektsToMap(this.enemies);
-        this.addObjektsToMap(this.clouds);
+        this.addObjektsToMap(this.level.enemies);
+        this.addObjektsToMap(this.level.clouds);
+        // this.addObjektsToMap(this.level.endboss);
 
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
-        requestAnimationFrame(function() {
+        requestAnimationFrame(() =>{
             self.draw();
         });
 
