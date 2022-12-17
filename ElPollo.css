@@ -3,11 +3,22 @@ body {
     align-items: center;
     flex-direction: column;
 
-}
+};
 
 
 canvas {
     background-color: black;
-  
+};
 
-}
+
+@media only screen and (max-width: 720){
+    canvas {
+        width: 100%;
+    };
+};
+
+@media only screen and (max-height: 480){
+    canvas {
+        height: 100vh;
+    };
+};
