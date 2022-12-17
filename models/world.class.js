@@ -9,6 +9,13 @@ class World {
     camera_x = 0;
     statusBar = new StatusBar();
     throwableObjekts = [];
+    statusBarBottle =  new StatusBarBottle();
+    statusBarCoin = new StatusBarCoin();
+    coins = new Coin();
+    // coins = [new Coin(), new Coin(), new Coin(), new Coin(), new Coin(),];
+    coinAmount = 0;
+   
+   
 
     constructor(canvas, keyboard) {
 
@@ -47,12 +54,38 @@ class World {
             if(this.character.isColliding(enemy)){
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy) // coin abzug bei collision 
-            
             }
-            
-        })
+        });
+
+        // this.coins.forEach(coin => {
+        //     if(this.character.isColliding(coins) && (coin.heigth !=0 && coin.width !=0)) {
+        //         coin.height = 0
+        //         coin.width = 0
+        //         this.coinAmount ++;
+        //         this.coins.setPercentage(this.coinAmount*20)
+                
+        //     }
+        // });
+
+
+
+
     };
 
+    
+    // collectCoin() {
+    //     this.level.collectableCoins.forEach((coin) => {
+    //       if (this.character.isColliding(coin)) {
+    //         if (!muted) {
+    //           coin.coin_sound.play();
+    //         }
+    //         coin.x = -300;
+    //         coin.y = -300;
+    //         this.character.amountCoins++;
+    //         this.coinBar.setPercentage((this.character.amountCoins / this.level.collectableCoins.length) * 100, 'coins');
+    //       }
+    //     });
+    //   }
 
 
     draw(){
@@ -62,16 +95,20 @@ class World {
        
         this.addObjektsToMap(this.level.backgroundObjekt);
         this.addObjektsToMap(this.level.clouds);
+        // this.addObjektsToMap(this.level.coins)
         this.addToMap(this.character);
-        
+       
         this.ctx.translate(-this.camera_x, 0); //cam back bestimmte objekte laufen mit wie energystatus
+       
         this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarCoin);
         this.addObjektsToMap(this.throwableObjekts);
         this.ctx.translate(this.camera_x, 0);
         this.addObjektsToMap(this.level.enemies);
        
         // this.addObjektsToMap(this.level.endboss);
-
+       
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
@@ -96,7 +133,7 @@ class World {
         if(mo.otherDirection){
             this.flipImage(mo); // spiegeln
             }
-            
+
             mo.draw(this.ctx);
             mo.drawFrame(this.ctx); // zeichne den Rahmne
 

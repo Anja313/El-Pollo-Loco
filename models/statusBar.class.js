@@ -1,35 +1,28 @@
 class StatusBar extends DrawableObjekt{
 
-    percentage = 100;
+    percentage = 100;  // startwert 100% 
    
    
 
     imgCoin = [
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/20.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/40.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/60.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/80.png',
-        'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png',
+     
         ]
 
-        imgCoin = [
-            'img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png',
-         
-            ]
+       
         
        
     constructor(){
         super();
         this.loadImages(this.imgCoin)
         this.setPercentage(100)
-        this.x = 50
-        this.y = 20
+        this.x = 30
+        this.y = 10
         this.width = 200
         this.height = 60
     }
