@@ -5,7 +5,7 @@ class DrawableObjekt   {
     height = 150;
     width = 100;
     img;
-    imageCach = {};
+    imageCach = [];
     currentImage = 0;
 
 
@@ -19,7 +19,7 @@ class DrawableObjekt   {
     }
 
     drawFrame(ctx){
-        if(this instanceof Character || this instanceof Chicken || this instanceof Endboss){ // Rahmen zeichnen
+        if(this instanceof Character || this instanceof ChickenNormal || this instanceof Endboss || this instanceof ChickenSmall || this instanceof Coin|| this instanceof Bottle){ // Rahmen zeichnen
             ctx.beginPath();
             ctx.lineWidth = '5'; //breite der linie
             ctx.rect(this.x, this.y, this.width, this.height)

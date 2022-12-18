@@ -5,6 +5,7 @@ class MovableObject extends DrawableObjekt {
     speedY = 0;
     acceleration = 1;
     energy = 100;
+    // energyUp = 0;
     lastHit = 0;
     groundPosition = 0
 
@@ -27,6 +28,18 @@ class MovableObject extends DrawableObjekt {
     
   }
 
+
+  animate(){
+    setInterval(() => {
+        this.moveLeft(); 
+    }, 1000 /60);
+
+     this.moveLeft();
+     setInterval(() => {
+        this.playAnimation(this.ImagesWalking);
+        
+     },100); 
+ }
   
     isColliding(mo){
         return this.x + this.width > mo.x && // berechnung des punktes der collidierung 
@@ -38,14 +51,22 @@ class MovableObject extends DrawableObjekt {
    
     hit(){
         
-        this.energy -=5;
+        this.energyDown -=5; // von 100 5 abziehen 
         if( this.energy < 0){ //bei 0 nichts mehr abziehen 
             this.energy = 0
         } else {
             this.lastHit = new Date().getTime();
         }
     }
-
+    // hitCoin(){
+        
+    //     this.energyUp -=5; // von 100 5 abziehen 
+    //     if( this.energyUp > 100){ //bei 0 nichts mehr abziehen 
+    //         this.energy = 100
+    //     } else {
+    //         this.lastHit = new Date().getTime();
+    //     }
+    // }
 
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit // Diffrence in ms
@@ -65,18 +86,19 @@ class MovableObject extends DrawableObjekt {
     };
 
 
+  
     moveRight(){
         this.x +=this.speed;
-        this.otherDirection;
+        this.otherDirection ;
 
     };
 
 
     moveLeft(){
         this.x -=this.speed;
-        this.otherDirection;
+        this.otherDirection ;
     };
-        
+       
 
     jump(){
         this.speedY = 18;// wie hoch er springt

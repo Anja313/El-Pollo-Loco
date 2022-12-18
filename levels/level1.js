@@ -1,19 +1,23 @@
 const level1 = new Level(
     [
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
+        new ChickenNormal(),
+        new ChickenNormal(),
+        new ChickenNormal(),
+
+        new ChickenSmall(),
+        new ChickenSmall(),
+        new ChickenSmall(),
+       
         new Endboss(),
+      
     ],
   
     [
         new Cloud(),
-        
-        
+        new Cloud(),
+        new Cloud(),
+       
+       
     ],
     [
        
@@ -41,7 +45,5 @@ const level1 = new Level(
     ],
 
 
-    [
-        new Coin('img/8_coin/coin_1.png')
-    ],
+  
 );
