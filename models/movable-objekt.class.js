@@ -3,11 +3,14 @@ class MovableObject extends DrawableObjekt {
     speed = 0.15;
     otherDirection = false;
     speedY = 0;
-    acceleration = 1;
     energy = 100;
     // energyUp = 0;
-    lastHit = 0;
-    groundPosition = 0
+    // lastHit = 0;
+    x = 120;
+    y = 280;
+    // imageCache = {};
+    acceleration = 1.5; 
+   
 
     // charakter fallen mit - / 
     applyGravity(){
@@ -20,7 +23,7 @@ class MovableObject extends DrawableObjekt {
     }
     
   isAboveGround(){
-    if( this instanceof ThrowableObjekt) {
+    if( this instanceof ThrowableObject) { // rahmen nur für bestimmte objekte zeichnen
         return true;
     }else{
         return this.y < 210 // bis wo er fällt 
@@ -29,58 +32,56 @@ class MovableObject extends DrawableObjekt {
   }
 
 
-  animate(){
-    setInterval(() => {
-        this.moveLeft(); 
-    }, 1000 /60);
+//   animate(){
+//     setInterval(() => {
+//         this.moveLeft(); 
+//     }, 1000 /60);
 
-     this.moveLeft();
-     setInterval(() => {
-        this.playAnimation(this.ImagesWalking);
+//      this.moveLeft();
+//      setInterval(() => {
+//         this.playAnimation(this.ImagesWalking);
         
-     },100); 
- }
+//      },100); 
+//  }
   
     isColliding(mo){
         return this.x + this.width > mo.x && // berechnung des punktes der collidierung 
         this.y + this.height > mo.y &&
         this.x < mo.x &&
-        this.y < mo.y +mo.height
+        this.y < mo.y + mo.height
     }; 
 
-   
+
+
+
+    // abziehen an herzen bei clision
     hit(){
         
-        this.energyDown -=5; // von 100 5 abziehen 
+        this.energy -= 5; // von 100 5 abziehen 
         if( this.energy < 0){ //bei 0 nichts mehr abziehen 
             this.energy = 0
         } else {
-            this.lastHit = new Date().getTime();
+            this.lastHit = new Date().getTime();    // zeit einbinden um die zeitspanne rechnen zu können
         }
     }
-    // hitCoin(){
-        
-    //     this.energyUp -=5; // von 100 5 abziehen 
-    //     if( this.energyUp > 100){ //bei 0 nichts mehr abziehen 
-    //         this.energy = 100
-    //     } else {
-    //         this.lastHit = new Date().getTime();
-    //     }
-    // }
+   
 
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit // Diffrence in ms
-        timepassed = timepassed/1000 // Difference is s
-        return timepassed < 0.5;
+        timepassed = timepassed / 1000; // Difference is s
+        return timepassed < 0.5;  // zeitspanne für die collision || wie lange soll die hurt dauern 
     }
+
     isDead(){
-        return this.energy == 0;
+        return this.energy == 0; // wenn die energy 0 ist dann zeige die bilder 
     }
 
 
+   
+//  vorschlneife für bilder 
     playAnimation(images){
-        let i = this.currentImage % images.length; //i = 0 rest von images.lenght
-        let path = images[i]; //images ?
+        let i = this.currentImage % images.length; //i = 0 rest von images.lenght :länge der array % zurück auf img 0 
+        let path = images[i]; 
         this.img = this.imageCach[path];
         this.currentImage++; 
     };
@@ -89,19 +90,19 @@ class MovableObject extends DrawableObjekt {
   
     moveRight(){
         this.x +=this.speed;
-        this.otherDirection ;
+     
 
     };
 
 
     moveLeft(){
         this.x -=this.speed;
-        this.otherDirection ;
+   
     };
        
 
     jump(){
-        this.speedY = 18;// wie hoch er springt
+        this.speedY = 30;// wie hoch er springt
     }
 
     

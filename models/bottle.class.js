@@ -9,17 +9,13 @@ class Bottle extends MovableObject {
        
     ];
    
-        constructor(){
-            super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
-            this.loadImages(this.ImagesCoin);
-           
-       
-                
-                this.x = 250 + Math.random() * 2000;
-                this.y = 230 - Math.random() * 100
-        }
-
-      
-    };
+    constructor(){
+        super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
+        this.loadImages(this.ImagesCoin);
+            
+        this.x = 250 + Math.random() * 2000;
+        this.y = 30 - Math.random() * 100
+    }     
+};
 
    

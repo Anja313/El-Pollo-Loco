@@ -31,17 +31,37 @@ class Endboss extends MovableObject{
 // ];
 
      constructor(){
-         super().loadImage('img/4_enemie_boss_chicken/1_walk/G1.png');
+        super().loadImage(this.ImagesWalking[0]);
          this.loadImages(this.ImagesWalking);
-        
          this.x = 2500 // x achse startet der endboss
-      
-         this.speed = 0.15 + Math.random() * 1;
-    
- 
+         this.speed = 0.15 + Math.random() * 1; // die geschwindigkeit 
          this.animate();
+        //  this.moveLeft();
        
      }
- 
-    }
- 
+
+
+
+
+            animate() {
+                setInterval(() => {
+                    this.playAnimation(this.ImagesWalking);
+                }, 200);
+
+            }   
+        }
+    //  animate(){
+    //     setInterval(() => {
+    //         this.moveLeft(); 
+    //     }, 1000 /60);
+    
+    //      this.moveLeft();
+    //      setInterval(() => {
+    //         this.playAnimation(this.ImagesWalking);
+            
+    //      },100); 
+    //  }
+    // animate(){
+    //     this.moveLeft();
+    //   }
+    
