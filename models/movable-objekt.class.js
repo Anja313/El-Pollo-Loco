@@ -16,6 +16,10 @@ class MovableObject extends DrawableObjekt {
             if (this.isAboveGround() || this.speedY > 0) {  // bis wo er fällt s.u. / springen wenn er bei y=0 ist 
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+                if(this.y >= 210){
+                    this.y = 210;
+                    this.speedY = 0;
+                }
             };
         }, 800 / 50); //wie schnell er fällt 
     }

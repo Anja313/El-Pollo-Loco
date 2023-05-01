@@ -13,7 +13,7 @@ class World {
     statusBarBottle = new StatusBarBottle();
     statusBarCoin = new StatusBarCoin();
     statusEndbossHeart = new StatusEndbossHeart();
-    coins = [new Coin(), new Coin(), new Coin(), new Coin(), new Coin()];
+    coins = [new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin()];
     bottle = [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()]
     amount = 0;
     energy = 100;
@@ -37,7 +37,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 200)
+        }, 50)
     }
 
     checkThrowObjects() {
@@ -62,10 +62,14 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && this.character.y + this.character.height) {
-                this.character.hit();
-                enemy.hit();
-                this.statusBar.setPercentage(this.character.energy);
+            if (this.character.isColliding(enemy) && !enemy.isDead()) {
+                if(this.character.speedY < 0) {
+                    enemy.hit();
+                    this.character.speedY = 0;
+                } else {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
             }
         });
 
