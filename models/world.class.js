@@ -62,8 +62,9 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
+            if (this.character.isColliding(enemy) && this.character.y + this.character.height) {
                 this.character.hit();
+                enemy.hit();
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
@@ -154,16 +155,13 @@ class World {
     }
 
     flipImage(mo) {
-
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * -1;
     }
 
-
     flipImageBack(mo) {
-
         mo.x = mo.x * -1;
         this.ctx.restore();
     }

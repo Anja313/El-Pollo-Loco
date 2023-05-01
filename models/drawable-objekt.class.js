@@ -8,6 +8,8 @@ class DrawableObjekt   {
     currentImage = 0;
     distance = 1;
 
+    disabled = false
+
     loadImage(path){
         this.img = new Image(); //new Image() =get.elementById(ID).img
         this.img.src = path;

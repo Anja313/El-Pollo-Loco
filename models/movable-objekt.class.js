@@ -35,7 +35,7 @@ class MovableObject extends DrawableObjekt {
             this.y < mo.y + mo.height
     };
 
-    // abziehen an herzen bei clision
+    // abziehen an herzen bei kolision
     hit() {
         this.energy -= 5; // von 100 5 abziehen 
         if (this.energy < 0) { //bei 0 nichts mehr abziehen 
