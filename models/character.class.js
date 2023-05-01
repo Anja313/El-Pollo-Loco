@@ -1,10 +1,8 @@
 class Character extends MovableObject {
-    
     height = 220; // gr. der charakter
     width = 120;
-    y = 80; // wo soll er startetn 
-    speed =5;
-
+    speed = 5;
+    y = 210;
     ImagesWalking = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -13,8 +11,7 @@ class Character extends MovableObject {
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png',
     ];
- 
-    
+
     ImagesJumping = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
@@ -25,10 +22,8 @@ class Character extends MovableObject {
         'img/2_character_pepe/3_jump/J-37.png',
         'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png',
-   
-       
     ];
- 
+
     ImagesHurt = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
@@ -45,59 +40,55 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-57.png',
     ];
 
-    constructor(){
+    constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.ImagesWalking);
         this.loadImages(this.ImagesJumping);
         this.loadImages(this.ImagesHurt);
         this.loadImages(this.ImagesDead);
+        this.applyGravity();
         this.animate();
     }
 
-    animate(){
+    animate() {
         setInterval(() => {
-            if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) { 
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight(); // level_end_x = 2250;
                 this.otherDirection = false;
             }
-                                           
-            if(this.world.keyboard.LEFT && this.x > 100 )  {  // läuft nicht links aus dem Bild raus 
+
+            if (this.world.keyboard.LEFT && this.x > 100) {  // läuft nicht links aus dem Bild raus 
                 this.moveLeft();
-                this.otherDirection = true;      
+                this.otherDirection = true;
             }
-                          
-            if(this.world.keyboard.UP && !this.isAboveGround()){ // springe bei knopfdruck / springen nur auf dem boden sprich bei y = boden 
+
+            if (this.world.keyboard.UP && !this.isAboveGround()) { // springe bei knopfdruck / springen nur auf dem boden sprich bei y = boden 
                 this.jump();
-              
-                 
             }
             this.world.camera_x = -this.x + 100;   //charakter startet leicht mittig 
         }, 1000 / 60);
 
-        
+
         setInterval(() => {
-            if(this.isDead()){
+            if (this.isDead()) {
                 this.playAnimation(this.ImagesDead);
-            }else
-                if(this.isHurt()){
-                this.playAnimation(this.ImagesHurt);
-                }else
-                    if(this.isAboveGround()) {
-                    this.playAnimation(this.ImagesJumping); // 
-                    } else{
-                        if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                        this.playAnimation(this.ImagesWalking);
+            } else
+                if (this.isHurt()) {
+                    this.playAnimation(this.ImagesHurt);
+                } else
+                    if (this.isAboveGround()) {
+                        this.playAnimation(this.ImagesJumping); // 
+                    } else {
+                        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                            this.playAnimation(this.ImagesWalking);
                         }
-            
+
                     }
         }, 100);
-   
-    }
 
+    }
 
     jump() {
-        this.speedY = 30;
+        this.speedY = 25;// wie hoch er springt
     }
-
-
 }

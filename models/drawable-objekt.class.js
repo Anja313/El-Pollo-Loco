@@ -1,5 +1,4 @@
 class DrawableObjekt   {
-
     x = 120;
     y = 340;
     height = 150;
@@ -8,7 +7,6 @@ class DrawableObjekt   {
     imageCach = {};
     currentImage = 0;
     distance = 1;
-
 
     loadImage(path){
         this.img = new Image(); //new Image() =get.elementById(ID).img
@@ -25,8 +23,7 @@ class DrawableObjekt   {
             // ctx.lineWidth = '5'; //breite der linie
             ctx.rect(this.x, this.y, this.width, this.height)
             ctx.stroke();
-            }
-         
+        }     
     }
 
     loadImages(arr){
@@ -36,4 +33,7 @@ class DrawableObjekt   {
             this.imageCach[path] = img;
         });
     }
+
+
+
 }
