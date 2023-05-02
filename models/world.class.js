@@ -14,9 +14,11 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusEndbossHeart = new StatusEndbossHeart();
     coins = [new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin()];
-    bottle = [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()]
+    bottle = [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()]
     amount = 0;
+    bottlecount = 0;
     energy = 100;
+    bottleadded = 0;
 
     constructor(canvas, keyboard) {
         this.level = level1
@@ -32,7 +34,6 @@ class World {
         this.character.world = this;
     };
 
-
     run() {
         setInterval(() => {
             this.checkCollisions();
@@ -42,8 +43,13 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.D) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-            this.throwableObjects.push(bottle);
+            if(this.bottlecount > 0 && (new Date().getTime() - this.bottleadded > 1000)) { // Damit kein dauerwerfen möglich ist, nur eine flasche pro sekunde
+                let bottle = new ThrowableObject(this.character.x + this.character.width , this.character.y + 40);
+                this.bottleadded = new Date().getTime();
+                this.throwableObjects.push(bottle);
+                this.bottlecount--;
+                this.statusBarBottle.setPercentage(this.bottlecount * 10)
+            }
         }
         this.throwableObjects.forEach(throwableObject => {
             this.level.enemies.forEach(enemy => {
@@ -85,18 +91,14 @@ class World {
 
         // Collision with Bottle 
         this.bottle.forEach((bottle) => {
-            if (this.character.isColliding(bottle)) {
-                bottle.height = 0
-                bottle.width = 0
-                this.amount++
-                //   this.character.hit();
-                this.statusBarBottle.setPercentage(this.amount * 5)
-
+            if (this.character.isColliding(bottle) && bottle.height != 0 && bottle.width != 0) {
+                bottle.height = 0;
+                bottle.width = 0;
+                this.bottlecount++;
+                this.statusBarBottle.setPercentage(this.bottlecount * 10)
             }
         })
     }
-
-
 
     // objekte werden zugefühgt
     draw() {
@@ -108,7 +110,7 @@ class World {
         this.addStatusBarToMap(this.statusBar);
         this.addStatusBarToMap(this.statusBarBottle);
         this.addStatusBarToMap(this.statusBarCoin);
-     //   this.addStatusBarToMap(this.statusEndbossHeart);
+        this.addStatusBarToMap(this.statusEndbossHeart);
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
@@ -117,10 +119,7 @@ class World {
         requestAnimationFrame(() => { //   requestAnimationFrame js function x mal bild wieder geben 
             self.draw();
         });
-
-
     };
-
 
     // alle mit cam bewegliche objekte 
     // aus welchen classen ich die daten ziehe zb level von level1

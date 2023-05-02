@@ -1,4 +1,5 @@
 class MovableObject extends DrawableObjekt {
+    BASELINE = 430
     speed = 0.15;
     otherDirection = false;
     speedY = 0;
@@ -14,22 +15,29 @@ class MovableObject extends DrawableObjekt {
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {  // bis wo er fällt s.u. / springen wenn er bei y=0 ist 
+                debugger;
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-                if(this.y >= 210){
-                    this.y = 210;
+                // Durch das Intervall kann y unter den Boden liegen. dieses If setzt die y koordinate auf den boden
+                if(this.y >= this.getGround()){
+                    this.y = this.getGround();
                     this.speedY = 0;
                 }
             };
-        }, 800 / 50); //wie schnell er fällt 
+        }, 16); //wie schnell er fällt 
     }
 
     isAboveGround() {
-        if (this instanceof ThrowableObject) { // rahmen nur für bestimmte objekte zeichnen
+        if (this instanceof ThrowableObject) { 
             return true;
         } else {
-            return this.y < 210 // bis wo er fällt 
+            return this.y < this.getGround();
         }
+    }
+
+    // Gibt die y koordinate des bodens zurück - Boden ist bei 430 minus die Höhe des Objekts
+    getGround() {
+        return this.BASELINE - this.height;
     }
 
     isColliding(mo) {

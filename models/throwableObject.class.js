@@ -1,21 +1,19 @@
 class ThrowableObject extends MovableObject {
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
-        // this.loadImages(this.ImagesWalking);
-        this.x = x;
-        this.y = y;
+        // this.loadImages(this.IMAGESTHROWNd);
         this.height = 100;
         this.width = 90;
-        this.throw(140, 400); //    wohin und wié hoch die flasche fliegt 
+        this.x = x;
+        this.y = y;
+        this.applyGravity();
+        this.throw(); //    wohin und wié hoch die flasche fliegt 
     }
 
     throw() {
-
-        this.speedY = 30;
-        this.applyGravity();
+        this.speedY = 25;
         setInterval(() => {
-            this.x = 10;
-        }, 25);
-
+            this.x += 20;
+        }, 50)
     }
 }

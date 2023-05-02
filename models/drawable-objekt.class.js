@@ -24,6 +24,8 @@ class DrawableObjekt   {
             ctx.beginPath();
             // ctx.lineWidth = '5'; //breite der linie
             ctx.rect(this.x, this.y, this.width, this.height)
+
+            ctx.rect(0, 210, 500, 1)
             ctx.stroke();
         }     
     }

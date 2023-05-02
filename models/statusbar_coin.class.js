@@ -1,4 +1,5 @@
 class StatusBarCoin extends DrawableObjekt {
+
     imgCoin = [
         'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png',
         'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/20.png',
@@ -13,10 +14,10 @@ class StatusBarCoin extends DrawableObjekt {
         super().loadImage('img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png')
         this.loadImages(this.imgCoin)
         this.setPercentage(0)
-        this.y = 105
+        this.y = 90
         this.x = 30
         this.width = 200
-        this.height = 60
+        this.height = 50
     }
 
     setPercentage(percentage) {

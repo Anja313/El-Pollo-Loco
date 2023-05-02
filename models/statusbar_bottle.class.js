@@ -15,10 +15,10 @@ class StatusBarBottle extends DrawableObjekt {
         super().loadImage('img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png')
         this.loadImages(this.imgBottle)
         this.setPercentage(0)
-        this.y = 60
+        this.y = 50
         this.x = 30
         this.width = 200
-        this.height = 60
+        this.height = 50
     }
 
     setPercentage(percentage) {
