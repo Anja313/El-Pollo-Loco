@@ -11,6 +11,8 @@ class World {
     rightButton = new MobileButton('img/background/right3.png', 120, 420, 40, 40);
     upButton = new MobileButton('img/background/UP2.png', 550, 420, 40, 40);
     throwButton = new MobileButton('img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 620, 390, 90, 80);
+    fullscreenButton = new MobileButton('img/background/Fullscreen3.png', 650, 425, 30, 30)
+    startGameButton = new MobileButton('img/background/StartGame2.png', 230, 410, 300, 60)
     character = new Character();
     statusBar = new StatusBar();
 
@@ -130,10 +132,9 @@ class World {
         })
     }
 
-    // objekte werden zugefühgt
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Welt leeren
-        // this.addToMap(this.clearRect);
         this.ctx.translate(this.camera_x, 0);
         if (this.gamestarted) {
             this.addObjectsToMapFunction();
@@ -153,12 +154,14 @@ class World {
         } else if (this.gameover) {
             debugger;
             this.ctx.translate(-this.camera_x, 0);
-            this.addDrawableObjectToMap(this.gameOverScreen);
-            this.addDrawableObjectToMap(this.leftButton)
+            this.addDrawableObjectToMap(this.gameOverScreen); 
         } else {
             this.ctx.translate(-this.camera_x, 0);
             this.addDrawableObjectToMap(this.startScreen);
-            this.addDrawableObjectToMap(this.leftButton)
+            // this.addDrawableObjectToMap(this.leftButton)
+        
+            this.addDrawableObjectToMap(this.fullscreenButton)
+            this.addDrawableObjectToMap(this.startGameButton)
         }
 
         let self = this; // hilfs Variable da this hier nicht erkannt wird 
