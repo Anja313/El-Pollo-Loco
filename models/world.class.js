@@ -6,9 +6,13 @@ class World {
     camera_x = 0;
     level;
     throwableObjects = [];
+    //
+    leftButton = new MobileButton('img/background/Left2.png', 30, 420, 40, 40);
+    rightButton = new MobileButton('img/background/right3.png', 120, 420, 40, 40);
+    upButton = new MobileButton('img/background/UP2.png', 550, 420, 40, 40);
+    throwButton = new MobileButton('img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 620, 390, 90, 80);
     character = new Character();
     statusBar = new StatusBar();
-    // clearRect =  new BackgroundObject('img/5_background/layers/air.png', 0, 0);
 
     statusBarBottle = new StatusBarBottle();
     statusBarCoin = new StatusBarCoin();
@@ -20,14 +24,35 @@ class World {
     energy = 100;
     bottleadded = 0;
 
+    startScreen = new StartScreen();
+    gameOverScreen = new GameOverScreen();
+
+    gameover = false;
+    gamestarted = false;
+
+    waitforKeyInterval;
+
     constructor(canvas, keyboard) {
         this.level = level1
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+
         this.draw();
         this.setWorld();
         this.run();
+
+
+        canvas.addEventListener('click', function (event) {
+            const rect = canvas.getBoundingClientRect()
+            const x = event.clientX - rect.left
+            const y = event.clientY - rect.top
+            if (x > 30 && x < 70 && y > 420 && y < 460) {
+                world.gamestarted = true;
+            }
+        }, false);
+
+
     };
 
     setWorld() {
@@ -43,8 +68,8 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.D) {
-            if(this.bottlecount > 0 && (new Date().getTime() - this.bottleadded > 1000)) { // Damit kein dauerwerfen möglich ist, nur eine flasche pro sekunde
-                let bottle = new ThrowableObject(this.character.x + this.character.width , this.character.y + 40);
+            if (this.bottlecount > 0 && (new Date().getTime() - this.bottleadded > 1000)) { // Damit kein dauerwerfen möglich ist, nur eine flasche pro sekunde
+                let bottle = new ThrowableObject(this.character.x + this.character.width, this.character.y + 40);
                 this.bottleadded = new Date().getTime();
                 this.throwableObjects.push(bottle);
                 this.bottlecount--;
@@ -55,11 +80,18 @@ class World {
             this.level.enemies.forEach(enemy => {
                 if (!enemy.isDead()) {
                     if (throwableObject.isColliding(enemy)) {
-                        enemy.kill();
-                        setTimeout(() => {
-                            let position = this.level.enemies.indexOf(enemy);
-                            this.level.enemies.splice(position, 1);
-                        }, 2000);
+                        throwableObject.deactivate()
+                        if (enemy instanceof Endboss) {
+                            enemy.hit(20);
+                            this.statusEndbossHeart.setPercentage(enemy.energy)
+                            if (enemy.isDead()) {
+                                setTimeout(() => {
+                                    world.gameover = true;
+                                }, 1000);
+                            }
+                        } else {
+                            enemy.kill();
+                        }
                     }
                 }
             });
@@ -69,8 +101,8 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !enemy.isDead()) {
-                if(this.character.speedY < 0) {
-                    enemy.hit();
+                if (this.character.speedY < 0) {
+                    enemy.kill();
                     this.character.speedY = 0;
                 } else {
                     this.character.hit();
@@ -82,8 +114,7 @@ class World {
         //Collision with coin
         this.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
-                coin.height = 0;
-                coin.width = 0;
+                coin.deactivate();
                 this.amount++;
                 this.statusBarCoin.setPercentage(this.amount * 20);
             }
@@ -92,8 +123,7 @@ class World {
         // Collision with Bottle 
         this.bottle.forEach((bottle) => {
             if (this.character.isColliding(bottle) && bottle.height != 0 && bottle.width != 0) {
-                bottle.height = 0;
-                bottle.width = 0;
+                bottle.deactivate();
                 this.bottlecount++;
                 this.statusBarBottle.setPercentage(this.bottlecount * 10)
             }
@@ -105,15 +135,31 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Welt leeren
         // this.addToMap(this.clearRect);
         this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMapFunction();
-        this.ctx.translate(-this.camera_x, 0); //cam back bestimmte objekte laufen nicht mit wie energystatus
-        this.addStatusBarToMap(this.statusBar);
-        this.addStatusBarToMap(this.statusBarBottle);
-        this.addStatusBarToMap(this.statusBarCoin);
-        this.addStatusBarToMap(this.statusEndbossHeart);
-        this.ctx.translate(this.camera_x, 0);
-        this.addToMap(this.character);
-        this.ctx.translate(-this.camera_x, 0);
+        if (this.gamestarted) {
+            this.addObjectsToMapFunction();
+            this.ctx.translate(-this.camera_x, 0); //cam back bestimmte objekte laufen nicht mit wie energystatus
+            this.addDrawableObjectToMap(this.statusBar);
+            this.addDrawableObjectToMap(this.statusBarBottle);
+            this.addDrawableObjectToMap(this.statusBarCoin);
+            this.addDrawableObjectToMap(this.statusEndbossHeart);
+            this.addDrawableObjectToMap(this.leftButton)
+            this.addDrawableObjectToMap(this.rightButton)
+            this.addDrawableObjectToMap(this.upButton)
+            this.addDrawableObjectToMap(this.throwButton)
+            this.ctx.translate(this.camera_x, 0);
+            this.addToMap(this.character);
+            this.ctx.translate(-this.camera_x, 0);
+
+        } else if (this.gameover) {
+            debugger;
+            this.ctx.translate(-this.camera_x, 0);
+            this.addDrawableObjectToMap(this.gameOverScreen);
+            this.addDrawableObjectToMap(this.leftButton)
+        } else {
+            this.ctx.translate(-this.camera_x, 0);
+            this.addDrawableObjectToMap(this.startScreen);
+            this.addDrawableObjectToMap(this.leftButton)
+        }
 
         let self = this; // hilfs Variable da this hier nicht erkannt wird 
         requestAnimationFrame(() => { //   requestAnimationFrame js function x mal bild wieder geben 
@@ -138,9 +184,8 @@ class World {
         });
     };
 
-    addStatusBarToMap(statusBar) {
-        statusBar.draw(this.ctx);
-        statusBar.drawFrame(this.ctx); // zeichne den Rahmne
+    addDrawableObjectToMap(drawableObject) {
+        drawableObject.draw(this.ctx);
     }
 
     // MovableObject
@@ -150,7 +195,6 @@ class World {
         }
 
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx); // zeichne den Rahmne
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);

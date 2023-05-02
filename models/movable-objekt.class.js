@@ -4,24 +4,24 @@ class MovableObject extends DrawableObjekt {
     otherDirection = false;
     speedY = 0;
     energy = 100;
-    // energyUp = 0;
-    // lastHit = 0;
     x = 120;
     y = 280;
-    // imageCache = {};
     acceleration = 1.5;
+    lastHit = 0;
 
     // charakter fallen mit - / 
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {  // bis wo er fällt s.u. / springen wenn er bei y=0 ist 
-                debugger;
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
                 // Durch das Intervall kann y unter den Boden liegen. dieses If setzt die y koordinate auf den boden
                 if(this.y >= this.getGround()){
                     this.y = this.getGround();
                     this.speedY = 0;
+                    if(this instanceof ThrowableObject) {
+                        this.deactivate();
+                    }
                 }
             };
         }, 16); //wie schnell er fällt 
@@ -45,11 +45,20 @@ class MovableObject extends DrawableObjekt {
             this.y + this.height > mo.y &&
             this.x < mo.x &&
             this.y < mo.y + mo.height
+            && this.isActive && mo.isActive
     };
 
     // abziehen an herzen bei kolision
     hit() {
-        this.energy -= 5; // von 100 5 abziehen 
+      this.hit(5);
+    }
+
+    kill() {
+        this.energy = 0;
+    }
+
+    hit(damage) {
+        this.energy -= damage; 
         if (this.energy < 0) { //bei 0 nichts mehr abziehen 
             this.energy = 0
         } else {

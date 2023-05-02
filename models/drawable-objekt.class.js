@@ -4,7 +4,7 @@ class DrawableObjekt   {
     height = 150;
     width = 100;
     img;
-    imageCach = {};
+    imageCach = [];
     currentImage = 0;
     distance = 1;
 
@@ -38,6 +38,15 @@ class DrawableObjekt   {
         });
     }
 
+    // Bei Kollisionen
+    isActive(){
+        return (this.width != 0 || this.height != 0)
+    }
+
+    deactivate() {
+        this.width = 0;
+        this.height = 0;
+    }
 
 
 }
