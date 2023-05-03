@@ -7,7 +7,9 @@ class DrawableObjekt   {
     imageCach = [];
     currentImage = 0;
     distance = 1;
-
+    cb = null;
+    cbMouseUp = null;
+    cbMouseDown = null;
     disabled = false
 
     loadImage(path){
@@ -29,6 +31,46 @@ class DrawableObjekt   {
     //         ctx.stroke();
     //     }     
     // }
+
+    isClicked(event, ctx){
+        const rect = ctx.canvas.getBoundingClientRect()
+        // Touchevents kann mehrere geben, deshalb andere behandlung
+        let x = 0;
+        let y = 0;
+
+        if(event instanceof TouchEvent){
+            x = event.changedTouches[0].clientX - rect.left;
+            y = event.changedTouches[0].clientY - rect.top  
+        } else {
+            x = event.clientX - rect.left
+            y = event.clientY - rect.top 
+        }    
+        if (x > this.x && x < this.x + this.width && y > this.y && y < this.y + this.height) {
+            return true;
+        } else {
+            return false;
+        }      
+            
+    }
+
+    clicked() {
+        if(this.cb != null) {
+            this.cb();
+        }
+    }
+
+    mouseUp() {
+        if(this.cbMouseUp != null) {
+            this.cbMouseUp();
+        }
+    }
+
+    mouseDown() {
+        if(this.cbMouseDown != null) {
+            this.cbMouseDown();
+        }
+    }
+
 
     loadImages(arr){
         arr.forEach((path) => {

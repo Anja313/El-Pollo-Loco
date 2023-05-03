@@ -3,6 +3,12 @@ class Character extends MovableObject {
     width = 120;
     speed = 5;
     y = 210;
+
+    moveLeftProp = false;
+    moveRightProp = false;
+    jumpProp = false;
+    throwProp = false;
+
     ImagesWalking = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -52,21 +58,22 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            if ((this.world.character.moveRightProp || this.world.keyboard.RIGHT) && this.x < this.world.level.level_end_x) {
                 this.moveRight(); // level_end_x = 2250;
                 this.otherDirection = false;
             }
 
-            if (this.world.keyboard.LEFT && this.x > 100) {  // läuft nicht links aus dem Bild raus 
+            if ((this.moveLeftProp || this.world.keyboard.LEFT) && this.x > 100) {
+                // läuft nicht links aus dem Bild raus
                 this.moveLeft();
                 this.otherDirection = true;
             }
 
-            if (this.world.keyboard.UP && !this.isAboveGround()) { // springe bei knopfdruck / springen nur auf dem boden sprich bei y = boden 
+            if ((this.jumpProp == true || this.world.keyboard.UP) && !this.isAboveGround()) {
                 this.jump();
             }
             this.world.camera_x = -this.x + 100;   //charakter startet leicht mittig 
-        }, 1000 / 60);
+        }, 30);
 
 
         setInterval(() => {
@@ -79,7 +86,7 @@ class Character extends MovableObject {
                     if (this.isAboveGround()) {
                         this.playAnimation(this.ImagesJumping); // 
                     } else {
-                        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.moveLeftProp || this.moveRightProp) {
                             this.playAnimation(this.ImagesWalking);
                         }
 

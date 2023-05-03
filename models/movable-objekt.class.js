@@ -45,19 +45,17 @@ class MovableObject extends DrawableObjekt {
             this.y + this.height > mo.y &&
             this.x < mo.x &&
             this.y < mo.y + mo.height
-            && this.isActive && mo.isActive
+            && this.isActive() && mo.isActive()
     };
-
-    // abziehen an herzen bei kolision
-    hit() {
-      this.hit(5);
-    }
 
     kill() {
         this.energy = 0;
     }
 
     hit(damage) {
+        if(damage == undefined){
+            damage = 5;
+        }
         this.energy -= damage; 
         if (this.energy < 0) { //bei 0 nichts mehr abziehen 
             this.energy = 0

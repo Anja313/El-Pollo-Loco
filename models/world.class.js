@@ -7,9 +7,9 @@ class World {
     level;
     throwableObjects = [];
     //
-    leftButton = new MobileButton('img/background/Left2.png', 30, 420, 40, 40);
-    rightButton = new MobileButton('img/background/right3.png', 120, 420, 40, 40);
-    upButton = new MobileButton('img/background/UP2.png', 550, 420, 40, 40);
+    leftButton = new MobileButton('img/background/Left3.png', 30, 420, 55, 55);
+    rightButton = new MobileButton('img/background/right4.png', 120, 420, 55, 55);
+    upButton = new MobileButton('img/background/UP3.png', 550, 420, 55, 55);
     throwButton = new MobileButton('img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 620, 390, 90, 80);
     fullscreenButton = new MobileButton('img/background/Fullscreen3.png', 650, 425, 30, 30)
     startGameButton = new MobileButton('img/background/StartGame2.png', 230, 410, 300, 60)
@@ -19,15 +19,18 @@ class World {
     statusBarBottle = new StatusBarBottle();
     statusBarCoin = new StatusBarCoin();
     statusEndbossHeart = new StatusEndbossHeart();
-    coins = [new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin()];
-    bottle = [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()]
+    coins = [new Coin(), new Coin(), new Coin(), new Coin(), new Coin()];
+    bottle = [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()]
     amount = 0;
     bottlecount = 0;
     energy = 100;
     bottleadded = 0;
 
     startScreen = new StartScreen();
+
     gameOverScreen = new GameOverScreen();
+
+    bottleButtonPressed = false;
 
     gameover = false;
     gamestarted = false;
@@ -39,22 +42,68 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-
+        this.startScreen.cb = function () { world.gamestarted = true; }
+        this.leftButton.cbMouseDown = function () { world.character.moveLeftProp = true; }
+        this.rightButton.cbMouseDown = function () { world.character.moveRightProp = true }
+        this.upButton.cbMouseDown = function () { world.character.jumpProp = true }
+        this.throwButton.cbMouseDown = function () { world.bottleButtonPressed = true }
+        this.leftButton.cbMouseUp = function () { world.character.moveLeftProp = false }
+        this.rightButton.cbMouseUp = function () { world.character.moveRightProp = false }
+        this.upButton.cbMouseUp = function () { world.character.jumpProp = false }
+        this.throwButton.cbMouseUp = function () { world.bottleButtonPressed = false }
         this.draw();
         this.setWorld();
-        this.run();
-
-
-        canvas.addEventListener('click', function (event) {
-            const rect = canvas.getBoundingClientRect()
-            const x = event.clientX - rect.left
-            const y = event.clientY - rect.top
-            if (x > 30 && x < 70 && y > 420 && y < 460) {
-                world.gamestarted = true;
+       
+        canvas.addEventListener('click', (event) => {
+            // Gehe über alle properties von world
+            for (var prop in this) {
+                if (Object.prototype.hasOwnProperty.call(this, prop)) {
+                    // wenn es eine drawable object ist
+                    if (this[prop] instanceof DrawableObjekt) {
+                        // Führe clicked methode aus
+                        if (this[prop].isClicked(event, world.ctx)) {
+                            this[prop].clicked();
+                        }
+                    }
+                }
             }
         }, false);
 
+        "mousedown touchstart".split(" ").forEach(function (e) {
+            canvas.addEventListener(e, (event) => {
+                // Gehe über alle properties von world
+                for (var prop in world) {
+                    if (Object.prototype.hasOwnProperty.call(world, prop)) {
+                        // wenn es eine drawable object ist
+                        if (world[prop] instanceof DrawableObjekt) {
+                            if (world[prop].isClicked(event, world.ctx)) {
+                                // Führe clicked methode aus
+                                world[prop].mouseDown();
+                            }
+                        }
+                    }
+                }
+            }, false);
+        });
 
+        "mouseup touchend".split(" ").forEach(function (e) {
+            canvas.addEventListener(e, (event) => {
+                // Gehe über alle properties von world
+                for (var prop in world) {
+                    if (Object.prototype.hasOwnProperty.call(world, prop)) {
+                        // wenn es eine drawable object ist
+                        if (world[prop] instanceof DrawableObjekt) {
+                            if (world[prop].isClicked(event, world.ctx)) {
+                                // Führe clicked methode aus
+                                world[prop].mouseUp();
+                            }
+                        }
+                    }
+                }
+            }, false);
+        });
+
+        this.run();
     };
 
     setWorld() {
@@ -69,7 +118,7 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D) {
+        if (this.keyboard.D || world.bottleButtonPressed == true) {
             if (this.bottlecount > 0 && (new Date().getTime() - this.bottleadded > 1000)) { // Damit kein dauerwerfen möglich ist, nur eine flasche pro sekunde
                 let bottle = new ThrowableObject(this.character.x + this.character.width, this.character.y + 40);
                 this.bottleadded = new Date().getTime();
@@ -107,8 +156,10 @@ class World {
                     enemy.kill();
                     this.character.speedY = 0;
                 } else {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
+                    if(!this.character.isHurt()){
+                        this.character.hit();
+                        this.statusBar.setPercentage(this.character.energy);
+                    }
                 }
             }
         });
@@ -152,14 +203,13 @@ class World {
             this.ctx.translate(-this.camera_x, 0);
 
         } else if (this.gameover) {
-            debugger;
             this.ctx.translate(-this.camera_x, 0);
-            this.addDrawableObjectToMap(this.gameOverScreen); 
+            this.addDrawableObjectToMap(this.gameOverScreen);
         } else {
             this.ctx.translate(-this.camera_x, 0);
             this.addDrawableObjectToMap(this.startScreen);
             // this.addDrawableObjectToMap(this.leftButton)
-        
+
             this.addDrawableObjectToMap(this.fullscreenButton)
             this.addDrawableObjectToMap(this.startGameButton)
         }
